@@ -1,4 +1,5 @@
-﻿using Business.Abstract;
+﻿
+using Business.Abstract;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -14,6 +15,18 @@ namespace Business.Concrete
         public BrandManager(IBrandDal brandDal)
         {
             _brandDal = brandDal;
+        }
+
+        public void Add(Brand brand)
+        {
+            if (brand.BrandName.Length > 2 )
+            {
+                _brandDal.Add(brand);
+            }
+            else
+            {
+                Console.WriteLine("Marka ismi için en az 2 karaker girilmeli.");
+            }
         }
 
         public List<Brand> GetAll()
