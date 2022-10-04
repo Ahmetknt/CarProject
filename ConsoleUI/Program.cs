@@ -22,12 +22,12 @@ namespace ConsoleUI
             //brandManager.Add(brand);
 
 
-            GetAllBrands(brandManager);
-            Console.WriteLine("-------------------------------");
-            GetAllCars(carManager);
-            Console.WriteLine("-------------------------------");
-            GetAllColors(colorManager);
-            Console.WriteLine("-------------------------------");
+            //GetAllBrands(brandManager);
+            //Console.WriteLine("-------------------------------");
+            //GetAllCars(carManager);
+            //Console.WriteLine("-------------------------------");
+            //GetAllColors(colorManager);
+            //Console.WriteLine("-------------------------------");
             GetCarsDetails(carManager);
 
         }
@@ -42,7 +42,7 @@ namespace ConsoleUI
 
         private static void GetAllCars(CarManager carManager)
         {
-            foreach (var car in carManager.GetAll())
+            foreach (var car in carManager.GetAll().Data)
             {
                 Console.WriteLine(car.Description);
             }
@@ -50,10 +50,21 @@ namespace ConsoleUI
 
         private static void GetCarsDetails(CarManager carManager)
         {
-            foreach (var car in carManager.GetCarDetailDto())
+            var result = carManager.GetCarDetailDto();
+
+            if (result.Success)
             {
-                Console.WriteLine(car.CarName + " " + car.BrandName + " "+ car.DailyPrice + " "+ car.ColorName);
+                foreach (var car in result.Data)
+                {
+                    Console.WriteLine(car.CarName + " " + car.BrandName + " " + car.DailyPrice + " " + car.ColorName);
+                }
             }
+            else
+            {
+                Console.WriteLine(result.Message);
+            }
+
+            
         }
 
         private static void GetAllColors(ColorManager colorManager)
