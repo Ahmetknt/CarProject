@@ -25,7 +25,7 @@ namespace Business.Concrete
 
             if (car.Description.Length<2)
             {
-                return new ErrorResult(Messages.CarDescriptionInvaid);
+                return new ErrorResult(Messages.CarDescriptionInvalid);
             }
 
             _carDal.Add(car);
@@ -66,6 +66,18 @@ namespace Business.Concrete
         public IDataResult<List<Car>> GetCarsByColorId(int colorId)
         {
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == colorId), Messages.CarListed);
+        }
+
+        public IResult Update(Car car)
+        {
+            _carDal.Update(car);
+            return new SuccessResult(Messages.CarUpdated);
+        }
+
+        public IResult Delete(Car car)
+        {
+            _carDal.Delete(car);
+            return new SuccessResult(Messages.CarDeleted);
         }
     }
 }

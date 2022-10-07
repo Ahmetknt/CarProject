@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -16,21 +18,32 @@ namespace Business.Concrete
             _colorDal = colorDal;
         }
 
-        public void Add(Color color)
+        public IResult Add(Color color)
         {
-            if (color.ColorName.Length > 2)
+            if (color.ColorName.Length < 2)
             {
-                _colorDal.Add(color);
+                return new ErrorResult(Messages.CarColorInvalid);
             }
-            else
-            {
-                Console.WriteLine("Renk için en az 2 karakter girilmeli");
-            }
+            _colorDal.Add(color);
+            return new SuccessResult(Messages.CarAdded);
+
         }
 
-        public List<Color> GetAll()
+        public IResult Delete(Color color)
         {
-            return _colorDal.GetAll();
+            _colorDal.Delete(color);
+            return new SuccessResult(Messages.CarDeleted);
+        }
+
+        public IDataResult<List<Color>> GetAll()
+        {
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(),Messages.CarListed);
+        }
+
+        public IResult Update(Color color)
+        {
+            _colorDal.Update(color);
+            return new SuccessResult(Messages.CarUpdated);
         }
     }
 }
