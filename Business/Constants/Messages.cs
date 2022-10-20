@@ -30,5 +30,6 @@ namespace Business.Constants
         public static string CarColorInvalid = "Araba rengi geçersiz.";
         public static string CarBrandInvalid = "Araba markası geçersiz.";
         public static string MaintenanceTime = "Sistem bakımda";
+        public static string CarCountOfBrandError = "Bir markada en fazla 10 araç olabilir.";
     }
 }

@@ -1,5 +1,9 @@
 ﻿using Business.Abstract;
 using Business.Constants;
+using Business.ValidationRules.FluentValidation;
+using Core.Aspects.Autofac.Validation;
+using Core.CrossCuttingConcerns.Validation;
+using Core.Utilities.Business;
 using Core.Utilities.Results;
 using DataAccess.Abstract;
 using DataAccess.Concrete.InMemory;
@@ -20,18 +24,18 @@ namespace Business.Concrete
             _carDal = iCarDal;
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Add(Car car)
-        { 
+        {
+            IResult result = BusinessRules.Run(CheckIfCarCountOfBrandCorrect(car.BrandId));
 
-            if (car.Description.Length<2)
+            if (result != null)
             {
-                return new ErrorResult(Messages.CarDescriptionInvalid);
+                return result;
             }
-
             _carDal.Add(car);
-            
             return new SuccessResult(Messages.CarAdded);
-                 
+           
         }
 
         public IDataResult<List<Car>> GetAll()
@@ -68,10 +72,18 @@ namespace Business.Concrete
             return new SuccessDataResult<List<Car>>(_carDal.GetAll(c => c.ColorId == colorId), Messages.CarListed);
         }
 
+        [ValidationAspect(typeof(CarValidator))]
         public IResult Update(Car car)
         {
+
+            IResult result = BusinessRules.Run(CheckIfCarCountOfBrandCorrect(car.BrandId));
+            if(result != null)
+            {
+                return result;
+            }
             _carDal.Update(car);
             return new SuccessResult(Messages.CarUpdated);
+           
         }
 
         public IResult Delete(Car car)
@@ -79,5 +91,17 @@ namespace Business.Concrete
             _carDal.Delete(car);
             return new SuccessResult(Messages.CarDeleted);
         }
+
+        private IResult CheckIfCarCountOfBrandCorrect(int brandId)
+        {
+            var result = _carDal.GetAll(c => c.BrandId == brandId).Count;
+            //Dene bunu postmanda
+            if (result > 10)
+            {
+                return new ErrorResult(Messages.CarCountOfBrandError);
+            }
+            return new SuccessResult();
+        }
+
     }
 }
