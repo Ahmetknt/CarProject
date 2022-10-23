@@ -48,7 +48,6 @@ namespace ConsoleUI
             Console.WriteLine("-------------------------------");
             GetAllRental(rentalManager);
             Console.WriteLine("-------------------------------");
-            GetAllUser(userManager);
 
         }
 
@@ -61,25 +60,6 @@ namespace ConsoleUI
                 foreach (var brand in result.Data)
                 {
                     Console.WriteLine(brand.BrandName);
-                }
-            }
-            else
-            {
-                Console.WriteLine(result.Message);
-            }
-
-
-        }
-
-        private static void GetAllUser(UserManager userManager)
-        {
-            var result = userManager.GetAll();
-
-            if (result.Success)
-            {
-                foreach (var user in result.Data)
-                {
-                    Console.WriteLine(user.FirstName + " "+user.LastName+ " "+user.Email);
                 }
             }
             else

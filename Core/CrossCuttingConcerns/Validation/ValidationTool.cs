@@ -14,7 +14,6 @@ namespace Core.CrossCuttingConcerns.Validation
             var result = validator.Validate(context);
             if (!result.IsValid)
             {
-                //2.11.42 kaldın.
                 throw new ValidationException(result.Errors);
             }
         
